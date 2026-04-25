@@ -20,11 +20,26 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@apollo/server": "^5.5.0",
+    "@as-integrations/express5": "^1.1.2",
+    "@nestjs/apollo": "^13.3.0",
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/graphql": "^13.3.0",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.4.1",
+    "@nestjs/typeorm": "^11.0.1",
+    "axios": "^1.15.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "express": "^5.2.1",
+    "graphql": "^16.13.2",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "sqlite3": "^5.1.7",
+    "swagger-ui-express": "^5.0.1",
+    "typeorm": "^0.3.28"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -32,7 +47,7 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
     "@types/supertest": "^7.0.0",
@@ -63,7 +78,12 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!**/main.(t|j)s",
+      "!**/*.module.(t|j)s",
+      "!**/*.entity.(t|j)s",
+      "!**/*.input.(t|j)s",
+      "!**/*.dto.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
