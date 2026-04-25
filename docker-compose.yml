@@ -1,23 +1,16 @@
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: timeoff-microservice
     ports:
       - '3000:3000'
     volumes:
-      # Sincroniza o seu código local com o contêiner para o Hot Reload funcionar
       - .:/usr/src/app
-      # Impede que a sua pasta node_modules local sobrescreva a do contêiner (Linux vs Windows/Mac)
       - /usr/src/app/node_modules
-      # Persiste o arquivo do SQLite. (Configure seu ORM para salvar em ./data/database.sqlite)
       - sqlite_data:/usr/src/app/data
     environment:
       - NODE_ENV=development
-      - PORT=3000
     command: npm run start:dev
 
 volumes:
-  # Define o volume persistente para o banco de dados
   sqlite_data:
