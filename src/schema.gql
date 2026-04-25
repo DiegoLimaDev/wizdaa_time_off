@@ -1,0 +1,82 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type TimeOffBalance {
+  id: ID!
+  employeeId: String!
+  locationId: String!
+  availableDays: Float!
+  lastSyncedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type TimeOffRequest {
+  id: ID!
+  employeeId: String!
+  locationId: String!
+  startDate: String!
+  endDate: String!
+  requestedDays: Float!
+  status: TimeOffStatus!
+  hcmReferenceId: String
+  errorMessage: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum TimeOffStatus {
+  PENDING_APPROVAL
+  PENDING_SYNC
+  APPROVED
+  REJECTED_BY_ADMIN
+  REJECTED_BY_HCM
+  SYNC_FAILED
+}
+
+type SyncResult {
+  success: Boolean!
+  processedCount: Float
+  processedAt: String!
+  hcmReferenceId: String
+  message: String
+}
+
+type Query {
+  balance(employeeId: String!, locationId: String!): TimeOffBalance!
+  requests(status: TimeOffStatus): [TimeOffRequest!]!
+}
+
+type Mutation {
+  createRequest(input: CreateTimeOffInput!): TimeOffRequest!
+  approveRequest(id: ID!): TimeOffRequest!
+  rejectRequest(id: ID!, reason: String!): TimeOffRequest!
+  syncBalancesFromHcm(balances: [SyncBalanceInput!]!): Int!
+  runSync: SyncResult!
+  mockHcmSync(input: HcmSyncInput!): SyncResult!
+}
+
+input CreateTimeOffInput {
+  employeeId: String!
+  locationId: String!
+  startDate: String!
+  endDate: String!
+  requestedDays: Float!
+}
+
+input SyncBalanceInput {
+  employeeId: String!
+  locationId: String!
+  availableDays: Float!
+}
+
+input HcmSyncInput {
+  employeeId: String!
+  startDate: String!
+  endDate: String!
+  days: Int!
+}
