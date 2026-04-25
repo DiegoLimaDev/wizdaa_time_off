@@ -1,98 +1,77 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+🚀 ReadyOn: Time-Off Microservice
+This microservice manages the lifecycle of time-off requests while maintaining balance integrity. It synchronizes with an external Human Capital Management (HCM) system, which acts as the ultimate Source of Truth (SoT).
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+For a deep dive into the architectural decisions, resilience strategies, and challenges addressed, please refer to the TRD.md.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+🛠 Tech Stack
+Framework: NestJS + TypeScript
 
-## Description
+API Layer: GraphQL (Apollo)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Database: SQLite (TypeORM)
 
-## Project setup
+Containerization: Docker & Docker Compose
 
-```bash
-$ npm install
-```
+Testing: Jest (Unit)
 
-## Compile and run the project
+📦 Getting Started (Docker)
+The fastest way to run the service and its dependencies (including the Mock HCM server) is via Docker.
 
-```bash
-# development
-$ npm run start
+1. Spin up the containers
+   Bash
+   docker-compose up -d --build
+   This command will:
 
-# watch mode
-$ npm run start:dev
+Install all dependencies.
 
-# production mode
-$ npm run start:prod
-```
+Initialize the SQLite database.
 
-## Run tests
+Execute the SeedService to populate the database with initial test data (e.g., employee diego-123).
 
-```bash
-# unit tests
-$ npm run test
+Start the GraphQL API on port 3000.
 
-# e2e tests
-$ npm run test:e2e
+2. Access the GraphQL Playground
+   Once the containers are healthy, you can explore the API and run queries/mutations at:
+   👉 http://localhost:3000/graphql
 
-# test coverage
-$ npm run test:cov
-```
+🧪 Testing & Reliability
+As this project follows an Agentic Development approach, the rigor of the test suite is the primary proof of the system's robustness.
 
-## Deployment
+Run Unit Tests
+Bash
+docker-compose exec app npm run test
+Run Coverage Report
+Bash
+docker-compose exec app npm run test:cov
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+🔄 Core Features & Flows
+Real-time Request Flow: File time-off requests with local balance validation (Fail-fast strategy).
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+HCM Synchronization: Automatic synchronization triggered upon manager approval.
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+Batch Balance Sync: A dedicated "Source of Truth" mutation to receive the full corpus of balances from the HCM (handling work anniversaries and annual refreshes).
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Defensive Error Handling: Specialized states like REJECTED_BY_HCM and SYNC_FAILED to handle API logic errors and network instability.
 
-## Resources
+📂 Project Structure
+src/modules/time-off: Core domain logic, balance calculations, and entities.
 
-Check out a few resources that may come in handy when working with NestJS:
+src/modules/sync: External communication layer and API error handling.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+src/modules/hcm-mock: Dedicated mock server to simulate HCM behaviors (Success, 400, 500, Latency).
 
-## Support
+📜 API Highlights (GraphQL)
+Queries
+balance(employeeId, locationId): Fetches current cached balance.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+requests(status): Lists time-off requests filtered by state.
 
-## Stay in touch
+Mutations
+createRequest(input): Submits a new request for approval.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+approveRequest(id): Authorizes the request and queues it for HCM synchronization.
 
-## License
+syncBalancesFromHcm(balances): Bulk upsert to reconcile local data with the HCM.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+⚖️ License
+This project is MIT licensed.
